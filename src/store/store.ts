@@ -4,6 +4,23 @@
 import { ref, Ref } from 'vue';
 import { defineStore } from "pinia";
 import { Const, PlotlyData } from '@/components/common';
+// import { Server } from 'ws'; 
+import {  WebSocketServer  }  from  'ws' ;
+import { createServer } from 'http';
+export const useWsServer = defineStore('wsServer', () => {
+  const server = new WebSocketServer({port:8080});
+
+  // server.on('connection', (ws) => {
+  //   ws.on('message', (mssg) => {
+  //     // const jsonData = JSON.parse(mssg.toString());
+  //     // console.log(jsonData)
+  //   });
+  //   ws.on('close', () => {
+  //     console.log('I lost a client');
+  //   });
+  // });
+});
+
 export const useOscContorllerStore = defineStore('oscContorller', () => {
 
   // WebSocket Instance for publishing connection and running measurement.
@@ -85,7 +102,7 @@ export const useOscContorllerStore = defineStore('oscContorller', () => {
 
       // define WebSocket Event when catch messages
       runConnection.onmessage = (event) => {
-        const jsonData = JSON.parse(event.data);
+        const jsonData = JSON.parse(event.toString());
         count++;
         switch (jsonData.type) {
           case "data": {

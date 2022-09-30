@@ -7,7 +7,7 @@
 import Plotly from 'plotly.js-dist-min'
 import { Const } from '@/components/common'
 import { onMounted } from "vue";
-import { useOscContorllerStore } from "@/store/store";
+import { useOscContorllerStore, useWsServer } from "@/store/store";
 
 const {getPlotlyData} = useOscContorllerStore();
 
