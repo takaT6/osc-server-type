@@ -4,21 +4,27 @@
 import { ref, Ref } from 'vue';
 import { defineStore } from "pinia";
 import { Const, PlotlyData } from '@/components/common';
-// import { Server } from 'ws'; 
-import {  WebSocketServer  }  from  'ws' ;
-import { createServer } from 'http';
-export const useWsServer = defineStore('wsServer', () => {
-  const server = new WebSocketServer({port:8080});
 
-  // server.on('connection', (ws) => {
-  //   ws.on('message', (mssg) => {
-  //     // const jsonData = JSON.parse(mssg.toString());
-  //     // console.log(jsonData)
-  //   });
-  //   ws.on('close', () => {
-  //     console.log('I lost a client');
-  //   });
-  // });
+import expressWs from 'express-ws'
+import express from 'express'
+export const useWsServer = defineStore('wsServer', () => {
+  const app2 = express()
+const host = process.env.HOST || '127.0.0.1'
+const port = 3000
+
+// WebSocket用のエンドポイントを追加
+const wsInstance = expressWs(app2)
+const { app } = wsInstance;
+app.ws('/ws', function(ws, req) {
+  ws.on('message', function(msg) {
+    console.log('from server: ' + msg)
+  })
+})
+
+// Nuxtのビルド周りは省略
+
+// 起動
+app.listen(port, host)
 });
 
 export const useOscContorllerStore = defineStore('oscContorller', () => {
