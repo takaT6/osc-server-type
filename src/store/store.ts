@@ -5,26 +5,25 @@ import { ref, Ref } from 'vue';
 import { defineStore } from "pinia";
 import { Const, PlotlyData } from '@/components/common';
 
-import expressWs from 'express-ws'
-import express from 'express'
+// import express from 'express'
 export const useWsServer = defineStore('wsServer', () => {
-  const app2 = express()
-const host = process.env.HOST || '127.0.0.1'
-const port = 3000
+  var app = require('express')();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+var port = process.env.PORT || 3000;
+app.get('/', function(req:any, res:any){
+  // res.sendFile(__dirname + '/index.html');
+});
 
-// WebSocket用のエンドポイントを追加
-const wsInstance = expressWs(app2)
-const { app } = wsInstance;
-app.ws('/ws', function(ws, req) {
-  ws.on('message', function(msg) {
-    console.log('from server: ' + msg)
-  })
-})
+io.on('connection', function(socket:any){
+  socket.on('chat message', function(msg:any){
+    io.emit('chat message', msg);
+  });
+});
 
-// Nuxtのビルド周りは省略
-
-// 起動
-app.listen(port, host)
+http.listen(port, function(){
+  console.log('listening on *:' + port);
+});
 });
 
 export const useOscContorllerStore = defineStore('oscContorller', () => {
