@@ -7,10 +7,10 @@ import { Const, PlotlyData } from '@/components/common';
 
 // import express from 'express'
 export const useWsServer = defineStore('wsServer', () => {
-  var app = require('express')();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-var port = process.env.PORT || 3000;
+  const app = require('express')();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+const port = process.env.PORT || 3000;
 app.get('/', function(req:any, res:any){
   // res.sendFile(__dirname + '/index.html');
 });
@@ -24,6 +24,7 @@ io.on('connection', function(socket:any){
 http.listen(port, function(){
   console.log('listening on *:' + port);
 });
+
 });
 
 export const useOscContorllerStore = defineStore('oscContorller', () => {
